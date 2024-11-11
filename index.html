@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary</title>
+</head>
+<body>
+    <h1>Dictionary</h1>
+    <div>
+        <h2>Search</h2>
+        <input type="text" id="searchInput" placeholder="Enter word">
+        <button onclick="searchWord()">Search</button>
+        <div id="searchResults"></div>
+    </div>
+
+    <div>
+        <h2>Suggest a Word</h2>
+        <input type="text" id="newWord" placeholder="New word">
+        <textarea id="definition" placeholder="Definition"></textarea>
+        <button onclick="submitWord()">Submit</button>
+        <div id="submissionMessage"></div>
+    </div>
+
+    <script>
+        async function searchWord() {
+            const query = document.getElementById('searchInput').value;
+            const response = await fetch('/words/search?query=' + query);
+            const words = await response.json();
+            const results = words.map(word => '<p><strong>' + word.word + '</strong>: ' + word.definition + '</p>').join('');
+            document.getElementById('searchResults').innerHTML = results || 'No results found';
+        }
+
+        async function submitWord() {
+            const word = document.getElementById('newWord').value;
+            const definition = document.getElementById('definition').value;
+
+            const response = await fetch('/words/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ word, definition })
+            });
+
+            const message = await response.text();
+            document.getElementById('submissionMessage').innerText = message;
+        }
+    </script>
+</body>
+</html>
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/S8se/cock3.git
+git push -u origin main
